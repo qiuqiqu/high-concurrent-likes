@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: high-concurrent-likes
+
+server:
+  port: 8081
+
