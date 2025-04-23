@@ -4,20 +4,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.gy.mapper.BlogMapper">
 
-    <resultMap id="BaseResultMap" type="com.gy.model.Blog">
-        <id property="id" column="id" jdbcType="BIGINT"/>
-        <result property="userid" column="userId" jdbcType="BIGINT"/>
-        <result property="title" column="title" jdbcType="VARCHAR"/>
-        <result property="coverimg" column="coverImg" jdbcType="VARCHAR"/>
-        <result property="content" column="content" jdbcType="VARCHAR"/>
-        <result property="thumbcount" column="thumbCount" jdbcType="INTEGER"/>
-        <result property="createtime" column="createTime" jdbcType="TIMESTAMP"/>
-        <result property="updatetime" column="updateTime" jdbcType="TIMESTAMP"/>
+    <resultMap id="BaseResultMap" type="com.gy.model.entity.Blog">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="coverImg" column="coverImg" jdbcType="VARCHAR"/>
+            <result property="content" column="content" jdbcType="VARCHAR"/>
+            <result property="createTime" column="createTime" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="updateTime" jdbcType="TIMESTAMP"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,userId,title,
-        coverImg,content,thumbCount,
-        createTime,updateTime
+        id,title,coverImg,
+        content,createTime,updateTime
     </sql>
 </mapper>

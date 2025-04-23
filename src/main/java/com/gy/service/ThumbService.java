@@ -1,7 +1,10 @@
 package com.gy.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.gy.model.Thumb;
+import com.gy.model.dto.thumb.DoThumbRequest;
+import com.gy.model.entity.Thumb;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author yun.guo
@@ -9,5 +12,8 @@ import com.gy.model.Thumb;
  * @createDate 2025-04-22 17:53:00
  */
 public interface ThumbService extends IService<Thumb> {
+    Boolean doThumb(DoThumbRequest doThumbRequest, HttpServletRequest request);
+
+    Boolean undoThumb(DoThumbRequest doThumbRequest, HttpServletRequest request);
 
 }

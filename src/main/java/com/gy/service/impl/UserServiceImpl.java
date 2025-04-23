@@ -1,10 +1,13 @@
 package com.gy.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gy.constant.UserConstant;
 import com.gy.mapper.UserMapper;
-import com.gy.model.User;
+import com.gy.model.entity.User;
 import com.gy.service.UserService;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @author yun.guo
@@ -14,7 +17,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         implements UserService {
-
+    @Override
+    public User getLoginUser(HttpServletRequest request) {
+        return (User) request.getSession().getAttribute(UserConstant.USER_LOGIN_STATE);
+    }
 }
 
 

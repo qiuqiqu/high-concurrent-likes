@@ -1,7 +1,7 @@
 package com.gy.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.gy.model.Thumb;
+import com.gy.model.entity.Thumb;
 
 /**
  * @author yun.guo

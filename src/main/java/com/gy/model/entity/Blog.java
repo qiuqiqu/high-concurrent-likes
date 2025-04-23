@@ -1,30 +1,26 @@
-package com.gy.model;
+package com.gy.model.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * 
  * @TableName blog
  */
-@TableName(value = "blog")
+@TableName(value ="blog")
 @Data
-public class Blog implements Serializable {
+public class Blog {
     /**
-     *
+     * 
      */
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
-    /**
-     *
-     */
-    private Long userid;
+    private Long userId;
 
     /**
      * 标题
@@ -34,7 +30,7 @@ public class Blog implements Serializable {
     /**
      * 封面
      */
-    private String coverimg;
+    private String coverImg;
 
     /**
      * 内容
@@ -44,18 +40,15 @@ public class Blog implements Serializable {
     /**
      * 点赞数
      */
-    private Integer thumbcount;
+    private Integer thumbCount;
 
     /**
      * 创建时间
      */
-    private Date createtime;
+    private Date createTime;
 
     /**
      * 更新时间
      */
-    private Date updatetime;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
+    private Date updateTime;
 }
