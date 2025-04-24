@@ -5,13 +5,13 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * 
+ * 博客
  * @TableName blog
  */
 @Data
 public class BlogVO {
     /**
-     * 
+     * 博客id
      */
     private Long id;
 

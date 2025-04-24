@@ -9,5 +9,8 @@ import lombok.Data;
  */
 @Data
 public class DoThumbRequest {
+    /**
+     * 博客id
+     */
     private Long blogId;
 }

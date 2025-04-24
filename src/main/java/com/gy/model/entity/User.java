@@ -13,13 +13,13 @@ import lombok.Data;
 @Data
 public class User {
     /**
-     * 
+     * 用户id
      */
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
     /**
-     * 
+     * 用户名
      */
     private String username;
 }

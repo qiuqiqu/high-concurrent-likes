@@ -8,14 +8,15 @@ import lombok.Data;
 import java.util.Date;
 
 /**
- * 
+ * 博客
  * @TableName blog
  */
 @TableName(value ="blog")
 @Data
 public class Blog {
+
     /**
-     * 
+     * 博客id
      */
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
