@@ -1,7 +1,9 @@
 package com.gy.constant;
 
+
 public interface ThumbConstant {
   
-    String USER_THUMB_KEY_PREFIX = "thumb:";  
-  
+    String USER_THUMB_KEY_PREFIX = "thumb:";
+
+    String TEMP_THUMB_KEY_PREFIX = "temp:thumb:%s";
 }
