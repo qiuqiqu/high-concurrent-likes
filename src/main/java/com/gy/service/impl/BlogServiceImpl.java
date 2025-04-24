@@ -3,15 +3,16 @@ package com.gy.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gy.constant.ThumbConstant;
 import com.gy.mapper.BlogMapper;
 import com.gy.model.entity.Blog;
-import com.gy.model.entity.Thumb;
 import com.gy.model.entity.User;
 import com.gy.model.vo.BlogVO;
 import com.gy.service.BlogService;
 import com.gy.service.ThumbService;
 import com.gy.service.UserService;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -38,6 +38,15 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
     @Lazy
     private ThumbService thumbService;
 
+    @Resource
+    private RedisTemplate<String, Object> redisTemplate;
+
+    /**
+     * 根据 id 获取博客
+     * @param blogId
+     * @param request
+     * @return
+     */
     @Override
     public BlogVO getBlogVOById(long blogId, HttpServletRequest request) {
         Blog blog = this.getById(blogId);
@@ -45,33 +54,43 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog>
         return this.getBlogVO(blog, loginUser);
     }
 
+    /**
+     * 获取博客视图对象
+     * @param blog
+     * @param loginUser
+     * @return
+     */
     @Override
     public BlogVO getBlogVO(Blog blog, User loginUser) {
         BlogVO blogVO = new BlogVO();
         BeanUtil.copyProperties(blog, blogVO);
 
-        Thumb thumb = thumbService.lambdaQuery()
-                .eq(Thumb::getUserId, loginUser.getId())
-                .eq(Thumb::getBlogId, blog.getId())
-                .one();
-        blogVO.setHasThumb(thumb != null);
+        Boolean exist = thumbService.hasThumb(blog.getId(), loginUser.getId());
+        blogVO.setHasThumb(exist);
 
         return blogVO;
     }
 
+    /**
+     * 获取博客视图对象列表
+     * @param blogList
+     * @param request
+     * @return
+     */
     @Override
     public List<BlogVO> getBlogVOList(List<Blog> blogList, HttpServletRequest request) {
         User loginUser = userService.getLoginUser(request);
         Map<Long, Boolean> blogIdHasThumbMap = new HashMap<>();
         if (ObjUtil.isNotEmpty(loginUser)) {
-            Set<Long> blogIdSet = blogList.stream().map(Blog::getId).collect(Collectors.toSet());
+            List<Object> blogIdList = blogList.stream().map(blog -> blog.getId().toString()).collect(Collectors.toList());
             // 获取点赞
-            List<Thumb> thumbList = thumbService.lambdaQuery()
-                    .eq(Thumb::getUserId, loginUser.getId())
-                    .in(Thumb::getBlogId, blogIdSet)
-                    .list();
-
-            thumbList.forEach(blogThumb -> blogIdHasThumbMap.put(blogThumb.getBlogId(), true));
+            List<Object> thumbList = redisTemplate.opsForHash().multiGet(ThumbConstant.USER_THUMB_KEY_PREFIX + loginUser.getId(), blogIdList);
+            for (int i = 0; i < thumbList.size(); i++) {
+                if (thumbList.get(i) == null) {
+                    continue;
+                }
+                blogIdHasThumbMap.put(Long.valueOf(blogIdList.get(i).toString()), true);
+            }
         }
 
         return blogList.stream()
