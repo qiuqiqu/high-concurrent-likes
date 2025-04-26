@@ -186,28 +186,28 @@
             </plugin>
 
             <!--代码加密-->
-            <plugin>
-                <groupId>com.github.core-lib</groupId>
-                <artifactId>xjar-maven-plugin</artifactId>
-                <version>v2.0.7</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                        <phase>package</phase>
-                        <configuration>
-                            <password>549B959068D38C5FC502D480C07CDE48</password>
-                            <mode>1</mode>
-                            <sourceDir>${project.build.directory}</sourceDir>
-                            <targetJar>${project.build.finalName}_x.jar</targetJar>
-                            <includes>
-                                <include>com/mx/**</include>
-                            </includes>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>com.github.core-lib</groupId>-->
+<!--                <artifactId>xjar-maven-plugin</artifactId>-->
+<!--                <version>v2.0.7</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>build</goal>-->
+<!--                        </goals>-->
+<!--                        <phase>package</phase>-->
+<!--                        <configuration>-->
+<!--                            <password>549B959068D38C5FC502D480C07CDE48</password>-->
+<!--                            <mode>1</mode>-->
+<!--                            <sourceDir>${project.build.directory}</sourceDir>-->
+<!--                            <targetJar>${project.build.finalName}_x.jar</targetJar>-->
+<!--                            <includes>-->
+<!--                                <include>com/mx/**</include>-->
+<!--                            </includes>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 
