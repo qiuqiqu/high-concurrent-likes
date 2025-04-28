@@ -56,59 +56,67 @@ public class SyncThumb2DBJob {
     }  
   
     public void syncThumb2DBByDate(String date) {
-        // 获取到临时点赞和取消点赞数据  
-        String tempThumbKey = RedisKeyUtil.getTempThumbKey(date);
-        Map<Object, Object> allTempThumbMap = redisTemplate.opsForHash().entries(tempThumbKey);
-        log.info("点赞数据：{}", allTempThumbMap);
-        boolean thumbMapEmpty = CollUtil.isEmpty(allTempThumbMap);
-  
-        // 同步 点赞 到数据库  
-        // 构建插入列表并收集blogId  
-        Map<Long, Long> blogThumbCountMap = new HashMap<>();
-        if (thumbMapEmpty) {  
-            return;  
-        }  
-        ArrayList<Thumb> thumbList = new ArrayList<>();
-        LambdaQueryWrapper<Thumb> wrapper = new LambdaQueryWrapper<>();
-        boolean needRemove = false;  
-        for (Object userIdBlogIdObj : allTempThumbMap.keySet()) {  
-            String userIdBlogId = (String) userIdBlogIdObj;  
-            String[] userIdAndBlogId = userIdBlogId.split(StrPool.COLON);
-            Long userId = Long.valueOf(userIdAndBlogId[0]);  
-            Long blogId = Long.valueOf(userIdAndBlogId[1]);  
-            // -1 取消点赞，1 点赞  
-            Integer thumbType = Integer.valueOf(allTempThumbMap.get(userIdBlogId).toString());  
-            if (thumbType == ThumbTypeEnum.INCR.getValue()) {
-                Thumb thumb = new Thumb();  
-                thumb.setUserId(userId);  
-                thumb.setBlogId(blogId);  
-                thumbList.add(thumb);  
-            } else if (thumbType == ThumbTypeEnum.DECR.getValue()) {  
-                // 拼接查询条件，批量删除  
-                needRemove = true;  
-                wrapper.or().eq(Thumb::getUserId, userId).eq(Thumb::getBlogId, blogId);  
-            } else {  
-                if (thumbType != ThumbTypeEnum.NON.getValue()) {  
-                    log.warn("数据异常：{}", userId + "," + blogId + "," + thumbType);  
-                }  
-                continue;  
-            }  
-            // 计算点赞增量  
-            blogThumbCountMap.put(blogId, blogThumbCountMap.getOrDefault(blogId, 0L) + thumbType);  
-        }  
-        // 批量插入  
-        thumbService.saveBatch(thumbList);  
-        // 批量删除  
-        if (needRemove) {  
-            thumbService.remove(wrapper);  
-        }  
-        // 批量更新博客点赞量  
-        if (!blogThumbCountMap.isEmpty()) {  
-            blogMapper.batchUpdateThumbCount(blogThumbCountMap);  
-        }  
-        // 异步删除  
-        CompletableFuture.runAsync(() -> {  
-            redisTemplate.delete(tempThumbKey);  
-        });  
+        try {
+            // 获取到临时点赞和取消点赞数据
+            String tempThumbKey = RedisKeyUtil.getTempThumbKey(date);
+            Map<Object, Object> allTempThumbMap = redisTemplate.opsForHash().entries(tempThumbKey);
+            log.info("点赞数据：{}", allTempThumbMap);
+            boolean thumbMapEmpty = CollUtil.isEmpty(allTempThumbMap);
+
+            // 同步 点赞 到数据库
+            // 构建插入列表并收集blogId
+            Map<Long, Long> blogThumbCountMap = new HashMap<>();
+            if (thumbMapEmpty) {
+                return;
+            }
+            ArrayList<Thumb> thumbList = new ArrayList<>();
+            LambdaQueryWrapper<Thumb> wrapper = new LambdaQueryWrapper<>();
+            boolean needRemove = false;
+            for (Object userIdBlogIdObj : allTempThumbMap.keySet()) {
+                String userIdBlogId = (String) userIdBlogIdObj;
+                log.info("点赞数据：{}", userIdBlogId);
+                String[] userIdAndBlogId = userIdBlogId.split(StrPool.COLON);
+                String[] userId1 = userIdAndBlogId[0].substring(1, userIdAndBlogId[0].length() - 1).split(",");
+                String[] blogId1 = userIdAndBlogId[1].substring(1, userIdAndBlogId[1].length() - 1).split(",");
+
+                Long userId = Long.valueOf(userId1[1]);
+                Long blogId = Long.valueOf(blogId1[1]);
+                // -1 取消点赞，1 点赞
+                Integer thumbType = Integer.valueOf(allTempThumbMap.get(userIdBlogId).toString());
+                if (thumbType == ThumbTypeEnum.INCR.getValue()) {
+                    Thumb thumb = new Thumb();
+                    thumb.setUserId(userId);
+                    thumb.setBlogId(blogId);
+                    thumbList.add(thumb);
+                } else if (thumbType == ThumbTypeEnum.DECR.getValue()) {
+                    // 拼接查询条件，批量删除
+                    needRemove = true;
+                    wrapper.or().eq(Thumb::getUserId, userId).eq(Thumb::getBlogId, blogId);
+                } else {
+                    if (thumbType != ThumbTypeEnum.NON.getValue()) {
+                        log.warn("数据异常：{}", userId + "," + blogId + "," + thumbType);
+                    }
+                    continue;
+                }
+                // 计算点赞增量
+                blogThumbCountMap.put(blogId, blogThumbCountMap.getOrDefault(blogId, 0L) + thumbType);
+            }
+            // 批量插入
+            thumbService.saveBatch(thumbList);
+            // 批量删除
+            if (needRemove) {
+                thumbService.remove(wrapper);
+            }
+            // 批量更新博客点赞量
+            if (!blogThumbCountMap.isEmpty()) {
+                blogMapper.batchUpdateThumbCount(blogThumbCountMap);
+            }
+            // 异步删除
+            CompletableFuture.runAsync(() -> {
+                redisTemplate.delete(tempThumbKey);
+            });
+        }catch (Exception e){
+            log.error("点赞数据同步异常：{}", e.getMessage());
+        }
     }  
 }
