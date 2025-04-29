@@ -26,7 +26,7 @@ public class DataTransApplication {
             application.setBannerMode(Banner.Mode.OFF);
             application.addListeners(pidFileWriter());
             application.run(args);
-            String logo = "\n (♥◠‿◠) ﾉﾞ  服务启动成功   ლ(´ڡ`ლ)ﾞ  \n";
+            String logo = "\n (♥◠‿◠)ﾉﾞ  服务启动成功   ლ(´ڡ`ლ)ﾞ  \n";
             log.info(logo);
         } catch (Exception e) {
             log.error("", e);
