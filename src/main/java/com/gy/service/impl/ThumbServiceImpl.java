@@ -81,7 +81,7 @@ public class ThumbServiceImpl extends ServiceImpl<ThumbMapper, Thumb>
                 thumb.setUserId(loginUser.getId());
                 thumb.setBlogId(blogId);
                 boolean success = update && this.save(thumb);
-                // 点赞记录存入 Redis
+                // 更新Redis和本地缓存点赞记录
                 if (success) {
                     String hashKey = ThumbConstant.USER_THUMB_KEY_PREFIX + loginUser.getId();
                     String fieldKey = blogId.toString();

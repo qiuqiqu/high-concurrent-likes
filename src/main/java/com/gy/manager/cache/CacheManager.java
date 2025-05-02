@@ -60,6 +60,12 @@ public class CacheManager {
         return hashKey + ":" + key;
     }
 
+    /**
+     * 获取数据
+     * @param hashKey
+     * @param key 博客id
+     * @return 点赞id
+     */
     public Object get(String hashKey, String key) {
         // 构造唯一的 composite key
         String compositeKey = buildCacheKey(hashKey, key);
@@ -90,6 +96,12 @@ public class CacheManager {
         return redisValue;
     }
 
+    /**
+     * 如果本地缓存中存在，则更新本地缓存
+     * @param hashKey
+     * @param key 博客id
+     * @param value 点赞id
+     */
     public void putIfPresent(String hashKey, String key, Object value) {
         String compositeKey = buildCacheKey(hashKey, key);
         Object object = localCache.getIfPresent(compositeKey);

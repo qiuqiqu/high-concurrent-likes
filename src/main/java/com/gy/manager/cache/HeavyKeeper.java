@@ -23,6 +23,7 @@ public class HeavyKeeper implements TopK {
     private final BlockingQueue<Item> expelledQueue;
     private final Random random;
     private long total;
+    // 最小计数阈值
     private final int minCount;
 
     public HeavyKeeper(int k, int width, int depth, double decay, int minCount) {
@@ -88,6 +89,9 @@ public class HeavyKeeper implements TopK {
 
         total += increment;
 
+        //maxCount 是当前 key 在所有 bucket 中的最大计数。
+        //minCount 是构造函数中传入的最小计数阈值（在 CacheManager 中设置为 10）。
+        //如果 maxCount 大于或等于 minCount，说明该 key 的访问次数达到了热 key 的阈值。
         if (maxCount < minCount) {
             return new AddResult(null, false, null);
         }
