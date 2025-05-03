@@ -75,5 +75,49 @@ public class RedisLuaScriptConstant {
         "\n" +
         "return 1  -- 返回 1 表示成功\n",
         Long.class
-    );  
+    );
+
+    /**
+     * 点赞 Lua 脚本
+     * KEYS[1]       -- 用户点赞状态键
+     * ARGV[1]       -- 博客 ID
+     * 返回:
+     * -1: 已点赞
+     * 1: 操作成功
+     */
+    public static final RedisScript<Long> THUMB_SCRIPT_MQ = new DefaultRedisScript<>(
+            "local userThumbKey = KEYS[1]\n" +
+                    "local blogId = ARGV[1]\n" +
+                    "\n" +
+                    "-- 判断是否已经点赞\n" +
+                    "if redis.call(\"HEXISTS\", userThumbKey, blogId) == 1 then\n" +
+                    "    return -1\n" +
+                    "end\n" +
+                    "\n" +
+                    "-- 添加点赞记录\n" +
+                    "redis.call(\"HSET\", userThumbKey, blogId, 1)\n" +
+                    "return 1",
+            Long.class);
+
+    /**
+     * 取消点赞 Lua 脚本
+     * KEYS[1]       -- 用户点赞状态键
+     * ARGV[1]       -- 博客 ID
+     * 返回:
+     * -1: 已点赞
+     * 1: 操作成功
+     */
+    public static final RedisScript<Long> UNTHUMB_SCRIPT_MQ = new DefaultRedisScript<>(
+            "local userThumbKey = KEYS[1]\n" +
+                    "local blogId = ARGV[1]\n" +
+                    "\n" +
+                    "-- 判断是否已点赞\n" +
+                    "if redis.call(\"HEXISTS\", userThumbKey, blogId) == 0 then\n" +
+                    "    return -1\n" +
+                    "end\n" +
+                    "\n" +
+                    "-- 删除点赞记录\n" +
+                    "redis.call(\"HDEL\", userThumbKey, blogId)\n" +
+                    "return 1",
+            Long.class);
 }
