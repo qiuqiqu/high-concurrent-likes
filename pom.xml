@@ -115,6 +115,12 @@
             <!-- 版本号通常与 Spring Boot 保持一致 -->
             <version>2.7.0</version>
         </dependency>
+        <!-- 引入 spring-pulsar -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-pulsar</artifactId>
+            <version>3.2.5</version>
+        </dependency>
 
 
     </dependencies>
