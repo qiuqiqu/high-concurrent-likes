@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.gy.model.entity.Blog;
 import com.gy.model.entity.User;
 import com.gy.model.vo.BlogVO;
+import jakarta.servlet.http.HttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
+
 import java.util.List;
 
 /**

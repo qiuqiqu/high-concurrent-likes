@@ -13,11 +13,12 @@ import com.gy.model.entity.User;
 import com.gy.service.BlogService;
 import com.gy.service.ThumbService;
 import com.gy.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.servlet.http.HttpServletRequest;
+
 import java.io.Serializable;
 
 /**

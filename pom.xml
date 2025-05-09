@@ -4,225 +4,123 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.mx</groupId>
-    <artifactId>high-concurrent-likes</artifactId>
-    <version>1.1.1.100</version>
+    <groupId>com.cong</groupId>
+    <artifactId>like-storm</artifactId>
+    <version>1.0.0</version>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.4.3</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
 
     <properties>
-        <java.version>1.8</java.version>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring-boot.version>2.7.0</spring-boot.version>
+        <java.version>21</java.version>
     </properties>
+    <url/>
+    <licenses>
+        <license/>
+    </licenses>
+    <developers>
+        <developer/>
+    </developers>
+    <scm>
+        <connection/>
+        <developerConnection/>
+        <tag/>
+        <url/>
+    </scm>
 
     <dependencies>
-        <!-- knife4j openapi3 接口文档 -->
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
-            <version>4.3.0</version>
-        </dependency>
+        <!-- 整合 Prometheus + Grafana -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring-boot.version}</version>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>io.micrometer</groupId>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+
+        <!-- 引入 spring-pulsar -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <version>${spring-boot.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
-            <version>5.8.18</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.22</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba.fastjson2</groupId>
-            <artifactId>fastjson2</artifactId>
-            <version>2.0.39</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.locationtech.proj4j</groupId>
-            <artifactId>proj4j</artifactId>
-            <version>1.3.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.locationtech.proj4j</groupId>
-            <artifactId>proj4j-epsg</artifactId>
-            <version>1.3.0</version>
-        </dependency>
-
-        <!-- springboot集成mybatis-plus -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.5.1</version>
-        </dependency>
-
-        <!-- mysql驱动 -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.29</version>
-        </dependency>
-
-        <!-- Redis Starter (默认使用 Lettuce 客户端) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-            <version>2.7.0</version>
-            <!-- 如果要排除 Lettuce 换用 Jedis -->
-            <exclusions>
-                <exclusion>
-                    <groupId>io.lettuce</groupId>
-                    <artifactId>lettuce-core</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <!-- 显式引入 Jedis 客户端 -->
-        <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
-            <version>3.6.1</version>
+            <artifactId>spring-boot-starter-pulsar</artifactId>
         </dependency>
 
         <!-- 本地缓存 -->
         <dependency>
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
-            <version>2.9.3</version>
+            <version>3.1.8</version>
         </dependency>
 
-
-        <!-- Spring Session 集成 -->
+        <!-- 引入 Redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>lettuce-core</artifactId>
+                    <groupId>io.lettuce</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
+        <!-- 引入 SpringSession -->
         <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
-            <!-- 版本号通常与 Spring Boot 保持一致 -->
-            <version>2.7.0</version>
         </dependency>
-        <!-- 引入 spring-pulsar -->
+        <!-- hutool 工具包 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.16</version>
+        </dependency>
+        <!-- MyBatis-Plus -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot3-starter</artifactId>
+            <version>3.5.10.1</version>
+        </dependency>
+        <!-- knife4j 接口文档 -->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>4.4.0</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-pulsar</artifactId>
-            <version>3.2.5</version>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
-    <build>
-        <pluginManagement>
-            <plugins>
-                <!--代码混淆proguard-->
-                <plugin>
-                    <groupId>com.github.wvengen</groupId>
-                    <artifactId>proguard-maven-plugin</artifactId>
-                    <version>2.6.0</version>
-                    <executions>
-                        <!-- 以下配置说明执行mvn的package命令时候，会执行proguard-->
-                        <execution>
-                            <phase>package</phase>
-                            <goals>
-                                <goal>proguard</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                    <configuration>
-                        <!-- 就是输入Jar的名称，我们要知道，代码混淆其实是将一个原始的jar，生成一个混淆后的jar，那么就会有输入输出。 -->
-                        <injar>${project.build.finalName}.jar</injar>
-                        <!-- 输出jar名称，输入输出jar同名的时候就是覆盖，也是比较常用的配置。 -->
-                        <outjar>${project.build.finalName}.jar</outjar>
-                        <!-- 是否混淆 默认是true -->
-                        <obfuscate>true</obfuscate>
-                        <!-- 配置一个文件，通常叫做proguard.cfg,该文件主要是配置options选项，也就是说使用proguard.cfg那么options下的所有内容都可以移到proguard.cfg中 -->
-                        <proguardInclude>${project.basedir}/proguard.cfg</proguardInclude>
-                        <!-- 额外的jar包，通常是项目编译所需要的jar -->
-                        <libs>
-                            <lib>${java.home}/lib/rt.jar</lib>
-                            <lib>${java.home}/lib/jce.jar</lib>
-                            <lib>${java.home}/lib/jsse.jar</lib>
-                        </libs>
-                        <!-- 对输入jar进行过滤比如，如下配置就是对META-INFO文件不处理。 -->
-                        <inLibsFilter>!META-INF/**,!META-INF/versions/9/**.class</inLibsFilter>
-                        <!-- 这是输出路径配置，但是要注意这个路径必须要包括injar标签填写的jar -->
-                        <outputDirectory>${project.basedir}/target</outputDirectory>
-                        <!--这里特别重要，此处主要是配置混淆的一些细节选项，比如哪些类不需要混淆，哪些需要混淆-->
-                        <options>
-                            <!-- 可以在此处写option标签配置，不过我上面使用了proguardInclude，故而我更喜欢在proguard.cfg中配置 -->
-                        </options>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
 
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.3.7.RELEASE</version>
-                <configuration>
-                    <mainClass>com.gy.DataTransApplication</mainClass>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>repackage</id>
-                        <goals>
-                            <goal>repackage</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!--代码加密-->
-<!--            <plugin>-->
-<!--                <groupId>com.github.core-lib</groupId>-->
-<!--                <artifactId>xjar-maven-plugin</artifactId>-->
-<!--                <version>v2.0.7</version>-->
-<!--                <executions>-->
-<!--                    <execution>-->
-<!--                        <goals>-->
-<!--                            <goal>build</goal>-->
-<!--                        </goals>-->
-<!--                        <phase>package</phase>-->
-<!--                        <configuration>-->
-<!--                            <password>549B959068D38C5FC502D480C07CDE48</password>-->
-<!--                            <mode>1</mode>-->
-<!--                            <sourceDir>${project.build.directory}</sourceDir>-->
-<!--                            <targetJar>${project.build.finalName}_x.jar</targetJar>-->
-<!--                            <includes>-->
-<!--                                <include>com/mx/**</include>-->
-<!--                            </includes>-->
-<!--                        </configuration>-->
-<!--                    </execution>-->
-<!--                </executions>-->
-<!--            </plugin>-->
-        </plugins>
-    </build>
 
 </project>

@@ -3,8 +3,9 @@ package com.gy.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gy.model.dto.thumb.DoThumbRequest;
 import com.gy.model.entity.Thumb;
+import jakarta.servlet.http.HttpServletRequest;
 
-import javax.servlet.http.HttpServletRequest;
+;
 
 /**
  * @author yun.guo

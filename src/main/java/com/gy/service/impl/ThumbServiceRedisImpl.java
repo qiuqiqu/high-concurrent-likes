@@ -16,13 +16,14 @@ import com.gy.service.BlogService;
 import com.gy.service.ThumbService;
 import com.gy.service.UserService;
 import com.gy.util.RedisKeyUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.support.TransactionTemplate;
 
-import javax.servlet.http.HttpServletRequest;
+
 import java.util.Arrays;
 
 /**

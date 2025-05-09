@@ -5,9 +5,10 @@ import com.gy.constant.UserConstant;
 import com.gy.mapper.UserMapper;
 import com.gy.model.entity.User;
 import com.gy.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * @author yun.guo
