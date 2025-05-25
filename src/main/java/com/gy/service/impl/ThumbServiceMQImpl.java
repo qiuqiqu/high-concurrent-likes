@@ -73,7 +73,7 @@ public class ThumbServiceMQImpl extends ServiceImpl<ThumbMapper, Thumb>
             log.error("点赞事件发送失败: userId={}, blogId={}", loginUserId, blogId, ex);
             return null;
         });
-
+        log.info("点赞事件发送成功: {}", thumbEvent);
         return true;
     }
 
@@ -113,7 +113,7 @@ public class ThumbServiceMQImpl extends ServiceImpl<ThumbMapper, Thumb>
             log.error("点赞事件发送失败: userId={}, blogId={}", loginUserId, blogId, ex);
             return null;
         });
-
+        log.info("取消点赞事件发送成功: {}", thumbEvent);
         return true;
     }
 

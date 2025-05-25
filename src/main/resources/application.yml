@@ -20,7 +20,12 @@ spring:
     username: root
     password: 123456
     url: jdbc:mysql://localhost:3306/like_storm?characterEncoding=utf8
-
+  # Pulsar 配置
+  pulsar:
+    client:
+      service-url: pulsar://192.168.193.101:6650
+    admin:
+      service-url: http://192.168.193.101:8080
 
 # spring-doc 接口文档
 springdoc:

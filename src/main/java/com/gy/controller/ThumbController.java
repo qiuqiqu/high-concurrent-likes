@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("thumb")
 public class ThumbController {
 
-    @Resource
+    @Resource(name = "thumbServiceMQ")
     private ThumbService thumbService;
 
     @Operation(summary = "点赞")
